@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using Reviews.CommandApi.Core.Entities.Requests;
+using Reviews.CommandApi.Core.Models.Requests;
 using Reviews.CommandApi.Core.Test.Builders;
-using Reviews.CommandApi.Shared;
 
 namespace Reviews.CommandApi.Core.Test.Services
 {
@@ -13,15 +12,15 @@ namespace Reviews.CommandApi.Core.Test.Services
         {
             // Arrange
             var request = GetValidRequest();
-            var (sut, mocks) = new ReviewMockBuilder()
+            var (sut, mocks) = new ReviewServiceMockBuilder()
                 .WithValidReview(request)
                 .Build();
 
             // Act
-            var operationResult = await sut.RegisterReview(request);
+            var result = await sut.RegisterReview(request);
 
             // Assert
-            operationResult.IsSuccess.Should().Be(OperationResult.Success());
+            result.Should().Be(true);
             mocks.VerifyAll();
         }
 

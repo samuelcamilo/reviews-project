@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Reviews.CommandApi.Core\Reviews.CommandApi.Core.csproj" />
     <ProjectReference Include="..\Reviews.CommandApi.Infra.Data\Reviews.CommandApi.Infra.Data.csproj" />
+    <ProjectReference Include="..\Reviews.CommandApi.Infra.Services\Reviews.CommandApi.Infra.Services.csproj" />
   </ItemGroup>
 
 </Project>

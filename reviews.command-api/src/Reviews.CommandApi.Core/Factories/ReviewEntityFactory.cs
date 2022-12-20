@@ -1,5 +1,5 @@
 ﻿using Reviews.CommandApi.Core.Entities;
-using Reviews.CommandApi.Core.Entities.Requests;
+using Reviews.CommandApi.Core.Models.Requests;
 
 namespace Reviews.CommandApi.Core.Factories
 {
@@ -14,7 +14,7 @@ namespace Reviews.CommandApi.Core.Factories
                 Title = request.Title,
                 Message = request.Message,
                 CreatedAt = DateTime.Now,
-                CreatedBy = string.Empty,
+                CreatedBy = request.CreatedBy,
             };
         }
     }

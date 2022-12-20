@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Reviews.CommandApi.Core.Entities.Requests;
-using Reviews.CommandApi.Core.Entities.Responses;
+using Reviews.CommandApi.Api.Examples.Requests;
 using Reviews.CommandApi.Core.Interfaces.Services;
+using Reviews.CommandApi.Core.Models.Requests;
+using Reviews.CommandApi.Core.Models.Responses;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace Reviews.CommandApi.Api.Controllers.V1
 {
@@ -15,6 +17,7 @@ namespace Reviews.CommandApi.Api.Controllers.V1
             => _reviewService = reviewService;
 
         [HttpPost]
+        [SwaggerRequestExample(typeof(ReviewRequest), typeof(ReviewRequestExample))]
         [ProducesResponseType(typeof(ReviewResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ReviewResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ReviewResponse), StatusCodes.Status404NotFound)]
@@ -25,13 +28,13 @@ namespace Reviews.CommandApi.Api.Controllers.V1
             [FromBody] ReviewRequest request,
             CancellationToken cancellationToken = default)
         {
-            var operationResult = await _reviewService
+            var reviewResponse = await _reviewService
                 .RegisterReview(request, cancellationToken);
 
             return Created(
-                uri: $"{Request.Path}/{operationResult.Result.Id}", 
-                value: operationResult.Result);
+                uri: $"{Request.Path}/{request.Id}",
+                value: reviewResponse);
         }
     }
 }
- 
+    

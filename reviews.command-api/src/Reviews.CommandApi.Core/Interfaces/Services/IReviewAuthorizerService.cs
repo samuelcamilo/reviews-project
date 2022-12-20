@@ -1,10 +1,9 @@
-﻿using Reviews.CommandApi.Core.Entities.Requests;
-using Reviews.CommandApi.Shared;
+﻿using Reviews.CommandApi.Core.Models.Requests;
 
 namespace Reviews.CommandApi.Core.Interfaces.Services
 {
     public interface IReviewAuthorizerService
     {
-        Task<OperationResult> AuthorizeAsync(ReviewRequest request);
+        Task<bool> AuthorizeAsync(ReviewRequest request, CancellationToken cancellationToken);
     }
 }

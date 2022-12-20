@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Reviews.CommandApi.Core.Extensions;
 using Reviews.CommandApi.Infra.Data.Extensions;
+using Reviews.CommandApi.Infra.Services.Extensions;
 
 namespace Reviews.CommandApi.IoC.DependencyInjection
 {
@@ -11,7 +12,8 @@ namespace Reviews.CommandApi.IoC.DependencyInjection
             this IServiceCollection services,
             IConfiguration configuration)
             => services
-                .AddCore()
-                .AddInfraData(configuration);
+                .AddCore(configuration)
+                .AddInfraData(configuration)
+                .AddInfraServices(configuration);
     }
 }

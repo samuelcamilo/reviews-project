@@ -1,8 +1,9 @@
-﻿namespace Reviews.CommandApi.Core.Entities.Responses
+﻿namespace Reviews.CommandApi.Core.Models.Responses
 {
-    public record ReviewResponse : ResponseBase
+    public record ReviewResponse : BaseResponse
     {
-        public override string Type { get; } = "review-response";
+        public override string Type => "review-response";
+        public string Message { get; set; }
 
         public static ReviewResponse From(Guid reviewId) => new()
         {
