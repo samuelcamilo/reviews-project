@@ -1,14 +1,13 @@
 ﻿using Moq;
 using Reviews.CommandApi.Core.Entities;
-using Reviews.CommandApi.Core.Entities.Requests;
 using Reviews.CommandApi.Core.Interfaces.Data;
 using Reviews.CommandApi.Core.Interfaces.Services;
+using Reviews.CommandApi.Core.Models.Requests;
 using Reviews.CommandApi.Core.Services;
-using Reviews.CommandApi.Shared;
 
 namespace Reviews.CommandApi.Core.Test.Builders
 {
-    public class ReviewMockBuilder
+    public class ReviewServiceMockBuilder
     {
         private Mock<IReviewAuthorizerService> _reviewAuthorizerService;
         private Mock<IReviewRepository> _reviewRepository;
@@ -16,23 +15,23 @@ namespace Reviews.CommandApi.Core.Test.Builders
 
         private readonly MockRepository _mocks = new(MockBehavior.Strict);
 
-        public ReviewMockBuilder()
+        public ReviewServiceMockBuilder()
         {
             _reviewAuthorizerService = _mocks.Create<IReviewAuthorizerService>(MockBehavior.Strict);
             _reviewRepository = _mocks.Create<IReviewRepository>(MockBehavior.Strict);
             _uow = _mocks.Create<IUnitOfWork>(MockBehavior.Strict);
         }
 
-        public ReviewMockBuilder WithValidReview(ReviewRequest request)
+        public ReviewServiceMockBuilder WithValidReview(ReviewRequest request)
         {
             _reviewAuthorizerService
-                .Setup(x => x.AuthorizeAsync(request))
-                .ReturnsAsync(OperationResult.Success())
+                .Setup(x => x.AuthorizeAsync(request, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true)
                 .Verifiable();
 
             _reviewRepository
                 .Setup(x => x.Insert(It.IsAny<ReviewEntity>()))
-                .Returns(OperationResult.Success())
+                .Returns(Task.CompletedTask)
                 .Verifiable();
 
             _uow

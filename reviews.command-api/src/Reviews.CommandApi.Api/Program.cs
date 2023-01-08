@@ -1,3 +1,4 @@
+using Reviews.CommandApi.Api.Extensions;
 using Reviews.CommandApi.IoC.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddIoC(builder.Configuration);
+
+builder.Services
+    .AddApi()
+    .AddIoC(builder.Configuration);
 
 var app = builder.Build();
 

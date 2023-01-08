@@ -1,12 +1,9 @@
 ﻿using Reviews.CommandApi.Core.Entities;
-using Reviews.CommandApi.Core.Entities.Requests;
-using Reviews.CommandApi.Core.Entities.Responses;
 using Reviews.CommandApi.Core.Factories;
 using Reviews.CommandApi.Core.Interfaces.Data;
 using Reviews.CommandApi.Core.Interfaces.Services;
-using static Reviews.CommandApi.Shared.OperationResult;
-using Reviews.CommandApi.Shared.Exceptions;
-using Reviews.CommandApi.Shared;
+using Reviews.CommandApi.Core.Models.Requests;
+using Reviews.CommandApi.Core.Models.Responses;
 
 namespace Reviews.CommandApi.Core.Services
 {
@@ -26,23 +23,23 @@ namespace Reviews.CommandApi.Core.Services
             _uow = uow;
         }
 
-        public async Task<OperationResult<ReviewResponse>> RegisterReview(
+        public async Task<ReviewResponse> RegisterReview(
             ReviewRequest request, 
             CancellationToken cancellationToken = default)
         {
             var authorized = await _reviewAuthorizerService
-                .AuthorizeAsync(request);
+                .AuthorizeAsync(request, cancellationToken);
 
-            if (!authorized.IsSuccess)
-                throw new NotAuthorizedReviewException();
+            if (!authorized)
+                return default;
 
             var authorizedReview = ReviewEntityFactory.CreateFrom(request);
             await RegisterAuthorizedReviewAsync(authorizedReview, cancellationToken);
 
-            return Success(ReviewResponse.From(request.Id));
+            return ReviewResponse.From(request.Id);
         }
 
-        private async Task<OperationResult> RegisterAuthorizedReviewAsync(
+        private async Task<bool> RegisterAuthorizedReviewAsync(
             ReviewEntity review,
             CancellationToken cancellationToken)
         {
@@ -52,8 +49,8 @@ namespace Reviews.CommandApi.Core.Services
             {
                 await _reviewRepository.Insert(review);
                 _uow.Commit();
- 
-                return Success();
+
+                return true;
             }
             catch (Exception)
             {
